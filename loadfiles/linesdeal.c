@@ -3,6 +3,10 @@
 
 const unsigned int base4[11] = {1,4,16,64,256,1024,4096,16384,65536,262144,1048576};
 
+
+                                                                            char buffer[50];
+
+
 Points * newPoints()
 {
     Points *nps = malloc(sizeof(Points));
@@ -10,20 +14,30 @@ Points * newPoints()
     return nps;
 }
 #ifdef DEBUG
+void LogWiter(char *s )
+{
+    FILE *fpw = fopen("run1.log","a");
+    fputs(s,fpw);
+    fclose(fpw);
+}
 void print9mer(char * s )
 {
     register unsigned int shash = 0;
     unsigned char i = 0;
 
+
     for(i = 0; i < 9; i++)
     {
         shash += (s[i]-'0')*base4[8-i];
     }
-    printf("%u\n",shash);
-    for(i = 0 ; i + 9 < 100 ; i++)
+    sprintf(buffer,"%u - %u\n",shash,i-9);
+    LogWiter(buffer);
+
+    for( ; i < 100 ; i++)
     {
-        shash =  (shash - (s[i] - '0')*base4[8]) * 4 + s[9+i] - '0';
-        printf("%u\n",shash);
+        shash =  (shash - (s[i-9] - '0')*base4[8]) * 4 + s[i] - '0';
+        sprintf(buffer,"%u - %u\n",shash,i-8);
+        LogWiter(buffer);
     }
 }
 #endif // DEBUG
@@ -32,32 +46,19 @@ _9mer Load9mer(llist mylist)
 {
     _9mer ans;
     //_9mer pointslist[base4[9]];
-    char * data_s;
-    FILE *fpw = fopen("")
-    register unsigned int shash = 0;
-    unsigned char i = 0;
+
     while(mylist != NULL)
     {
-        //   print9mer(mylist->data.s);
-        data_s = mylist->data.s;
 
-        for(i = 0; i < 9; i++)
-        {
-            shash += (data_s[i]-'0')*base4[8-i];
-        }
-        printf("%u\n",shash);
-        for(i = 0 ; i + 9 < 100 ; i++)
-        {
-            shash =  (shash - (data_s[i] - '0')*base4[8]) * 4 + data_s[9+i] - '0';
-            printf("%u\n",shash);
-        }
+        sprintf(buffer,"\n\n\n%d\n",mylist->data.lnum);
+        LogWiter(buffer);
 
-        system("pause");
+        print9mer(mylist->data.s);
+
+        //system("pause");
 
         mylist = mylist->next;
     }//    while(mylist != NULL)
-
-
 
     return ans;
 }//_9mer Load9mer(llist op)
